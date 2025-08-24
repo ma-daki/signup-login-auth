@@ -1,5 +1,6 @@
-let users = [
-      { username: 'demo', email: 'demo@example.com', password: 'password123' }
+// Simulated user database (in real app, this would be server-side)
+    let users = [
+      { username: 'demo', email: 'demo@example.com', password: 'Demo123!' }
     ];
 
     // DOM Elements
@@ -58,6 +59,33 @@ let users = [
       setLoading('login', false);
     });
 
+    // Password strength validation function
+    function validatePasswordStrength(password) {
+      const errors = [];
+      
+      if (password.length < 8) {
+        errors.push('at least 8 characters');
+      }
+      
+      if (!/[A-Z]/.test(password)) {
+        errors.push('one uppercase letter');
+      }
+      
+      if (!/[a-z]/.test(password)) {
+        errors.push('one lowercase letter');
+      }
+      
+      if (!/[0-9]/.test(password)) {
+        errors.push('one number');
+      }
+      
+      if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+        errors.push('one symbol (!@#$%^&* etc.)');
+      }
+      
+      return errors;
+    }
+
     // Signup form submission
     signupForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -78,12 +106,14 @@ let users = [
       }
       
       if (users.find(u => u.email === email)) {
-        showError('signupEmailError', 'An account with this email already exists');
+        showError('signupEmailError', 'This email address is already registered');
         hasErrors = true;
       }
       
-      if (password.length < 6) {
-        showError('signupPasswordError', 'Password must be at least 6 characters');
+      // Password strength validation
+      const passwordErrors = validatePasswordStrength(password);
+      if (passwordErrors.length > 0) {
+        showError('signupPasswordError', `Password must contain ${passwordErrors.join(', ')}`);
         hasErrors = true;
       }
       
@@ -189,11 +219,26 @@ let users = [
 
     // Real-time validation
     document.getElementById('signupPassword').addEventListener('input', function() {
+      const password = this.value;
       const confirmPassword = document.getElementById('confirmPassword');
-      if (confirmPassword.value && this.value !== confirmPassword.value) {
+      
+      // Check password strength in real-time
+      if (password.length > 0) {
+        const passwordErrors = validatePasswordStrength(password);
+        if (passwordErrors.length > 0) {
+          showError('signupPasswordError', `Password must contain ${passwordErrors.join(', ')}`);
+        } else {
+          document.getElementById('signupPasswordError').style.display = 'none';
+          document.getElementById('signupPassword').classList.remove('error');
+        }
+      }
+      
+      // Check password match
+      if (confirmPassword.value && password !== confirmPassword.value) {
         showError('confirmPasswordError', 'Passwords do not match');
-      } else {
+      } else if (confirmPassword.value) {
         document.getElementById('confirmPasswordError').style.display = 'none';
+        document.getElementById('confirmPassword').classList.remove('error');
       }
     });
 
@@ -203,5 +248,17 @@ let users = [
         showError('confirmPasswordError', 'Passwords do not match');
       } else {
         document.getElementById('confirmPasswordError').style.display = 'none';
+        this.classList.remove('error');
+      }
+    });
+
+    // Real-time email validation for signup
+    document.getElementById('signupEmail').addEventListener('blur', function() {
+      const email = this.value;
+      if (email && users.find(u => u.email === email)) {
+        showError('signupEmailError', 'This email address is already registered');
+      } else {
+        document.getElementById('signupEmailError').style.display = 'none';
+        this.classList.remove('error');
       }
     });
