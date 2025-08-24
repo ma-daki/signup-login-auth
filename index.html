@@ -59,6 +59,29 @@
 
       <label for="signupPassword">Password</label>
       <input type="password" id="signupPassword" name="password" placeholder="Enter your password" required>
+      <div class="password-requirements" id="passwordRequirements">
+        <p>Password must contain:</p>
+        <div class="requirement" id="req-length">
+          <i class="fas fa-times"></i>
+          <span>At least 8 characters</span>
+        </div>
+        <div class="requirement" id="req-uppercase">
+          <i class="fas fa-times"></i>
+          <span>One uppercase letter (A-Z)</span>
+        </div>
+        <div class="requirement" id="req-lowercase">
+          <i class="fas fa-times"></i>
+          <span>One lowercase letter (a-z)</span>
+        </div>
+        <div class="requirement" id="req-number">
+          <i class="fas fa-times"></i>
+          <span>One number (0-9)</span>
+        </div>
+        <div class="requirement" id="req-symbol">
+          <i class="fas fa-times"></i>
+          <span>One symbol (!@#$%^&*)</span>
+        </div>
+      </div>
       <div class="error-message" id="signupPasswordError"></div>
 
       <label for="confirmPassword">Confirm Password</label>
@@ -77,6 +100,40 @@
     </form>
 
     <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+  </div>
+
+  <!-- Dashboard Container -->
+  <div class="container hidden" id="dashboardContainer">
+    <h2 id="welcomeTitle">Welcome back!</h2>
+    <p id="welcomeMessage">You are successfully logged in.</p>
+    
+    <div class="dashboard-content">
+      <div class="user-info">
+        <h3>Account Information</h3>
+        <p><strong>Username:</strong> <span id="dashUsername"></span></p>
+        <p><strong>Email:</strong> <span id="dashEmail"></span></p>
+        <p><strong>Account created:</strong> <span id="dashCreated"></span></p>
+      </div>
+      
+      <div class="dashboard-actions">
+        <button class="btn active" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Popup -->
+  <div class="popup-overlay" id="welcomePopup">
+    <div class="popup">
+      <div class="popup-content">
+        <i class="fas fa-check-circle"></i>
+        <h3 id="popupTitle">Welcome back!</h3>
+        <p id="popupMessage">Login successful</p>
+        <button class="btn active" id="closePopup">Continue</button>
+      </div>
+    </div>
   </div>
   <script src="index.js"></script>
   <script src="auth.js"></script>
