@@ -9,7 +9,7 @@
   <title>Login</title>
 </head>
 <body>
-  <!-- Login Container -->
+<!-- Login Container -->
   <div class="container" id="loginContainer">
     <h2>Welcome back</h2>
     <p>Welcome back! Please enter your details.</p>
@@ -22,7 +22,12 @@
       <div class="error-message" id="loginEmailError"></div>
 
       <label for="loginPassword">Password</label>
-      <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+      <div class="input-group">
+        <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+        <button type="button" class="password-toggle" id="loginPasswordToggle">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
       <div class="error-message" id="loginPasswordError"></div>
 
       <a href="#" class="forgot-password" id="forgotPassword">Forgot password?</a>
@@ -46,7 +51,7 @@
     <h2>Create Account</h2>
     <p>Please enter your details to get started.</p>
     
-    <div class="success-message" id="signupSuccess">Account created successfully! You can now login.</div>
+    <div class="success-message" id="signupSuccess">Account created successfully! Redirecting to login...</div>
     
     <form class="form" id="signupForm">
       <label for="signupUsername">Username</label>
@@ -58,7 +63,12 @@
       <div class="error-message" id="signupEmailError"></div>
 
       <label for="signupPassword">Password</label>
-      <input type="password" id="signupPassword" name="password" placeholder="Enter your password" required>
+      <div class="input-group">
+        <input type="password" id="signupPassword" name="password" placeholder="Enter your password" required>
+        <button type="button" class="password-toggle" id="signupPasswordToggle">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
       <div class="password-requirements" id="passwordRequirements">
         <p>Password must contain:</p>
         <div class="requirement" id="req-length">
@@ -85,7 +95,12 @@
       <div class="error-message" id="signupPasswordError"></div>
 
       <label for="confirmPassword">Confirm Password</label>
-      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+      <div class="input-group">
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+        <button type="button" class="password-toggle" id="confirmPasswordToggle">
+          <i class="fas fa-eye"></i>
+        </button>
+      </div>
       <div class="error-message" id="confirmPasswordError"></div>
       
       <button type="submit" class="btn active" id="signupBtn">

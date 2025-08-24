@@ -31,6 +31,28 @@
     const logoutBtn = document.getElementById('logoutBtn');
     const closePopupBtn = document.getElementById('closePopup');
 
+    // Password toggle elements
+    const loginPasswordToggle = document.getElementById('loginPasswordToggle');
+    const signupPasswordToggle = document.getElementById('signupPasswordToggle');
+    const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+
+    // Password toggle functionality
+    function initPasswordToggle(toggleBtn, passwordInput) {
+      toggleBtn.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        const icon = this.querySelector('i');
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+      });
+    }
+
+    // Initialize password toggles
+    initPasswordToggle(loginPasswordToggle, document.getElementById('loginPassword'));
+    initPasswordToggle(signupPasswordToggle, document.getElementById('signupPassword'));
+    initPasswordToggle(confirmPasswordToggle, document.getElementById('confirmPassword'));
+
     // Check if user is already logged in on page load
     window.addEventListener('load', () => {
       if (currentUser) {
@@ -62,6 +84,7 @@
       const password = document.getElementById('loginPassword').value;
       
       clearErrors();
+      clearMessages(); // Clear any existing messages
       setLoading('login', true);
       
       // Simulate API call delay
@@ -70,21 +93,23 @@
       const user = users.find(u => u.email === email && u.password === password);
       
       if (user) {
-        // Save session
+        // Save session and email for future logins
         currentUser = user;
         sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+        sessionStorage.setItem('rememberedEmail', email);
         
-        showWelcomePopup(user.username, 'Welcome back!');
+        showWelcomePopup(user.username, 'Login successful! Welcome back.');
         
         setTimeout(() => {
+          hideWelcomePopup();
           showDashboard();
-        }, 2000);
+        }, 2500);
       } else {
         const foundUser = users.find(u => u.email === email);
         if (!foundUser) {
           showError('loginEmailError', 'No account found with this email address');
         } else {
-          showError('loginPasswordError', 'Incorrect password');
+          showError('loginPasswordError', 'Incorrect password. Please try again.');
         }
       }
       
@@ -147,15 +172,21 @@
       users.push(newUser);
       sessionStorage.setItem('userDB', JSON.stringify(users));
       
-      showSuccess('signupSuccess', 'Account created successfully! You can now login.');
-      signupForm.reset();
+      showSuccess('signupSuccess', 'Account created successfully! Redirecting to login...');
       
-      // Switch to login after 2 seconds
+      // Auto-redirect to login after 2 seconds
       setTimeout(() => {
+        signupForm.reset(); // Reset form first
         showLogin();
         clearMessages();
         // Pre-fill email for convenience
         document.getElementById('loginEmail').value = email;
+        sessionStorage.setItem('rememberedEmail', email);
+        // Show a helpful message
+        showSuccess('loginSuccess', `Account created! Please enter your password to login.`);
+        setTimeout(() => {
+          document.getElementById('loginSuccess').style.display = 'none';
+        }, 3000);
       }, 2000);
       
       setLoading('signup', false);
@@ -167,8 +198,15 @@
       sessionStorage.removeItem('currentUser');
       showLogin();
       clearMessages();
+      
+      // Keep the remembered email
+      const rememberedEmail = sessionStorage.getItem('rememberedEmail');
       loginForm.reset();
       signupForm.reset();
+      
+      if (rememberedEmail) {
+        document.getElementById('loginEmail').value = rememberedEmail;
+      }
     });
 
     // Google login/signup (mock)
@@ -197,6 +235,12 @@
     function showLogin() {
       hideAllContainers();
       loginContainer.classList.remove('hidden');
+      
+      // Pre-fill remembered email
+      const rememberedEmail = sessionStorage.getItem('rememberedEmail');
+      if (rememberedEmail) {
+        document.getElementById('loginEmail').value = rememberedEmail;
+      }
     }
 
     function showSignup() {
@@ -272,6 +316,7 @@
     function clearMessages() {
       document.querySelectorAll('.success-message').forEach(el => {
         el.style.display = 'none';
+        el.textContent = '';
       });
       clearErrors();
     }
@@ -280,9 +325,15 @@
       const errorEl = document.getElementById(elementId);
       const inputEl = errorEl.previousElementSibling;
       
+      // Handle input groups with toggle buttons
+      if (inputEl.classList && inputEl.classList.contains('input-group')) {
+        inputEl.querySelector('input').classList.add('error');
+      } else {
+        inputEl.classList.add('error');
+      }
+      
       errorEl.textContent = message;
       errorEl.style.display = 'block';
-      inputEl.classList.add('error');
     }
 
     function showSuccess(elementId, message) {
@@ -380,46 +431,24 @@
         this.classList.remove('error');
       }
     });
-  </script> password = this.value;
-      const confirmPassword = document.getElementById('confirmPassword');
-      
-      // Check password strength in real-time
-      if (password.length > 0) {
-        const passwordErrors = validatePasswordStrength(password);
-        if (passwordErrors.length > 0) {
-          showError('signupPasswordError', `Password must contain ${passwordErrors.join(', ')}`);
-        } else {
-          document.getElementById('signupPasswordError').style.display = 'none';
-          document.getElementById('signupPassword').classList.remove('error');
-        }
-      }
-      
-      // Check password match
-      if (confirmPassword.value && password !== confirmPassword.value) {
-        showError('confirmPasswordError', 'Passwords do not match');
-      } else if (confirmPassword.value) {
-        document.getElementById('confirmPasswordError').style.display = 'none';
-        document.getElementById('confirmPassword').classList.remove('error');
-      }
-    });
 
-    document.getElementById('confirmPassword').addEventListener('input', function() {
-      const password = document.getElementById('signupPassword').value;
-      if (this.value && this.value !== password) {
-        showError('confirmPasswordError', 'Passwords do not match');
-      } else {
-        document.getElementById('confirmPasswordError').style.display = 'none';
-        this.classList.remove('error');
-      }
-    });
+    // Debug function to check users in database
+    function debugUsers() {
+      console.log('Current users in database:', users);
+      console.log('Current user session:', currentUser);
+    }
+    
+    // Make debug function available globally
+    window.debugUsers = debugUsers;
 
-    // Real-time email validation for signup
-    document.getElementById('signupEmail').addEventListener('blur', function() {
-      const email = this.value;
-      if (email && users.find(u => u.email === email)) {
-        showError('signupEmailError', 'This email address is already registered');
-      } else {
-        document.getElementById('signupEmailError').style.display = 'none';
-        this.classList.remove('error');
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load remembered email on page load
+      const rememberedEmail = sessionStorage.getItem('rememberedEmail');
+      if (rememberedEmail && !currentUser) {
+        document.getElementById('loginEmail').value = rememberedEmail;
       }
+      
+      // Debug: log initial state
+      console.log('Page loaded - Users in database:', users.length);
     });

@@ -1,4 +1,4 @@
-    * {
+* {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -66,6 +66,10 @@
       margin-bottom: 5px;
     }
 
+    .input-group {
+      position: relative;
+    }
+
     input {
       padding: 14px 16px;
       border: 2px solid #e1e5e9;
@@ -73,6 +77,29 @@
       font-size: 16px;
       transition: all 0.3s ease;
       background: #f8f9fa;
+      width: 100%;
+    }
+
+    input[type="password"], input[type="text"] {
+      padding-right: 45px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 4px;
+      transition: color 0.3s ease;
+    }
+
+    .password-toggle:hover {
+      color: #667eea;
     }
 
     input:focus {
