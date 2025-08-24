@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <title>Login</title>
+</head>
+<body>
+  <!-- Login Container -->
+  <div class="container" id="loginContainer">
+    <h2>Welcome back</h2>
+    <p>Welcome back! Please enter your details.</p>
+    
+    <div class="success-message" id="loginSuccess">Login successful! Redirecting...</div>
+    
+    <form class="form" id="loginForm">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" name="email" placeholder="Enter your email" required>
+      <div class="error-message" id="loginEmailError"></div>
+
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" name="password" placeholder="Enter your password" required>
+      <div class="error-message" id="loginPasswordError"></div>
+
+      <a href="#" class="forgot-password" id="forgotPassword">Forgot password?</a>
+      
+      <button type="submit" class="btn active" id="loginBtn">
+        <span>Login</span>
+        <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+      </button>
+      
+      <button type="button" class="btn" id="googleLoginBtn">
+        <i class="fa-brands fa-google"></i>
+        <span>Sign in with Google</span>
+      </button>
+    </form>
+
+    <p>Don't have an account? <a href="#" id="showSignup">Sign up for free</a></p>
+  </div>
+
+  <!-- Signup Container -->
+  <div class="container hidden" id="signupContainer">
+    <h2>Create Account</h2>
+    <p>Please enter your details to get started.</p>
+    
+    <div class="success-message" id="signupSuccess">Account created successfully! You can now login.</div>
+    
+    <form class="form" id="signupForm">
+      <label for="signupUsername">Username</label>
+      <input type="text" id="signupUsername" name="username" placeholder="Enter your username" required>
+      <div class="error-message" id="signupUsernameError"></div>
+
+      <label for="signupEmail">Email</label>
+      <input type="email" id="signupEmail" name="email" placeholder="Enter your email" required>
+      <div class="error-message" id="signupEmailError"></div>
+
+      <label for="signupPassword">Password</label>
+      <input type="password" id="signupPassword" name="password" placeholder="Enter your password" required>
+      <div class="error-message" id="signupPasswordError"></div>
+
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+      <div class="error-message" id="confirmPasswordError"></div>
+      
+      <button type="submit" class="btn active" id="signupBtn">
+        <span>Create Account</span>
+        <i class="fas fa-spinner fa-spin" style="display: none;"></i>
+      </button>
+      
+      <button type="button" class="btn" id="googleSignupBtn">
+        <i class="fa-brands fa-google"></i>
+        <span>Sign up with Google</span>
+      </button>
+    </form>
+
+    <p>Already have an account? <a href="#" id="showLogin">Login</a></p>
+  </div>
+  <script src="index.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>
